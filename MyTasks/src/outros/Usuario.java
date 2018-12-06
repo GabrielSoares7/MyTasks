@@ -7,14 +7,14 @@ public class Usuario {
     private String senha;
 
     public Usuario(String nome, String login, String senha) {
-        this.nome = nome;
+        setNome(nome);
         setLogin(login);
         setSenha(senha);
     }
 
     public Usuario(int id, String nome, String login, String senha) {
         this.id = id;
-        this.nome = nome;
+        setNome(nome);
         setLogin(login);
         setSenha(senha);
     }
@@ -31,7 +31,7 @@ public class Usuario {
         if(!login.isEmpty() && login.length() >= 2)
             this.login = login;
         else
-            throw new RuntimeException("Digite um login!");
+            throw new RuntimeException("Login inválido!");
         
     }
     
@@ -41,7 +41,8 @@ public class Usuario {
     
     public void setSenha(String senha) {
         if(senha.length() < 8)
-            throw new RuntimeException("Digite uma senha com no mínimo 8 caracteres!");
+            throw new RuntimeException("Uma senha com no mínimo 8 caracteres "
+                    + "precisa ser informada!");
         else
             this.senha = senha;
     }
@@ -51,6 +52,9 @@ public class Usuario {
     }
 
     public void setNome(String nome) {
-        this.nome = nome;
+        if(nome.isEmpty())
+            throw new RuntimeException("Um nome precisa ser informado!");
+        else
+            this.nome = nome;
     }
 }

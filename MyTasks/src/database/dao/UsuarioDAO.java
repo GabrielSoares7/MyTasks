@@ -2,6 +2,7 @@ package database.dao;
 
 import database.Conexao;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import outros.Usuario;
@@ -27,7 +28,30 @@ public class UsuarioDAO {
         } 
         catch (SQLException ex) {
             JOptionPane.showMessageDialog(null,
-                "Ocorreu um erro durante o cadastro do cliente: " + ex);
+                "Ocorreu um erro durante o cadastro do usuário: " + ex);
+            ex.printStackTrace();
         }
+    }
+    
+    public Usuario validarUsuario(String login, String senha) {
+        String select = "SELECT * FROM usuarios WHERE login = ? AND senha = ?";
+        
+        try {
+            PreparedStatement stmt = conexao.getConexao().prepareStatement(select);
+            stmt.setString(1, login);
+            stmt.setString(2, senha);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.first()) {
+                return new Usuario(rs.getInt("id"), 
+                        rs.getString("nome"), rs.getString("login"),
+                        rs.getString("senha"));
+            }
+        }
+        catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro na sua conexão com a base de dados!");
+            ex.printStackTrace();
+            System.exit(0);
+        }
+        return null;
     }
 }
