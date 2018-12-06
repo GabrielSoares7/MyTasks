@@ -5,11 +5,13 @@
  */
 package frames;
 
+import outros.IAcoesTelaFilha;
+
 /**
  *
  * @author Gabriel Soares
  */
-public class JLogin extends javax.swing.JFrame {
+public class JLogin extends javax.swing.JFrame implements IAcoesTelaFilha {
 
     /**
      * Creates new form JLogin
@@ -122,7 +124,8 @@ public class JLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCadastrarActionPerformed
-        // TODO add your handling code here:
+        JCadastro jCadastro = new JCadastro(this);
+        jCadastro.abrir();
     }//GEN-LAST:event_jButtonCadastrarActionPerformed
 
     /**
@@ -153,10 +156,8 @@ public class JLogin extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new JLogin().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new JLogin().setVisible(true);
         });
     }
 
@@ -170,4 +171,14 @@ public class JLogin extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldLogin;
     private javax.swing.JLabel labelLogo;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void fechar() {
+        setVisible(true);
+    }
+    
+    @Override
+    public void abrir() {
+        setVisible(false);
+    }
 }
