@@ -73,4 +73,21 @@ public class QuadroDAO {
             ex.printStackTrace();
         }
     }
+    
+    public void update(Quadro quadro) {
+        String insert = "UPDATE quadros SET nome=? WHERE id = ?";
+        
+        try {
+            PreparedStatement stmt = conexao.getConexao().prepareStatement(insert);
+            stmt.setString(1, quadro.getNome());
+            stmt.setInt(2, quadro.getId());
+            stmt.execute();
+            stmt.close();
+        } 
+        catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,
+                "Ocorreu um erro durante a atualização na base de dados: " + ex);
+            ex.printStackTrace();
+        }
+    }
 }

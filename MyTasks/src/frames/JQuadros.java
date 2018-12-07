@@ -7,7 +7,7 @@ import outros.IAcoesTelaFilha;
 import outros.Quadro;
 import outros.Usuario;
 
-public class JQuadros extends javax.swing.JFrame {
+public class JQuadros extends javax.swing.JFrame implements IAcoesTelaFilha {
     
     private final Usuario usuario;
     private ArrayList <Quadro> quadros;
@@ -24,6 +24,7 @@ public class JQuadros extends javax.swing.JFrame {
         this.iAcoesTelaFilha = iAcoesTelaFilha;
     }
 
+    @Override
     public void abrir() {
         setVisible(true);
         iAcoesTelaFilha.abrir();
@@ -84,6 +85,11 @@ public class JQuadros extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jListQuadros);
 
         jButtonAbrir.setText("Abrir");
+        jButtonAbrir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAbrirActionPerformed(evt);
+            }
+        });
 
         jButtonAdd.setBackground(new java.awt.Color(0, 102, 102));
         jButtonAdd.setForeground(new java.awt.Color(255, 255, 255));
@@ -181,6 +187,15 @@ public class JQuadros extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButtonDeletarActionPerformed
 
+    private void jButtonAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAbrirActionPerformed
+        int i = jListQuadros.getSelectedIndex();
+        
+        if(i >= 0) {
+            JTarefas jTarefas = new JTarefas(this, quadros.get(i));
+            jTarefas.abrir();
+        }
+    }//GEN-LAST:event_jButtonAbrirActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAbrir;
@@ -192,4 +207,9 @@ public class JQuadros extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void fechar() {
+        atualizarLista();
+    }
 }
