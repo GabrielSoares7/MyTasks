@@ -44,7 +44,7 @@ public class JTarefas extends javax.swing.JFrame implements IAcoesTelaFilha{
             
             @Override
             public String getElementAt(int i) {
-                return (tarefas.get(i).isFeito() ? "X - " : "O - ") 
+                return (tarefas.get(i).isFeito() ? "☑ " : "☐ ") 
                         + tarefas.get(i).getTitulo(); 
             }
         });
@@ -93,6 +93,11 @@ public class JTarefas extends javax.swing.JFrame implements IAcoesTelaFilha{
             }
         });
 
+        jList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jListMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jList);
 
         jButton1.setBackground(new java.awt.Color(204, 51, 0));
@@ -186,38 +191,17 @@ public class JTarefas extends javax.swing.JFrame implements IAcoesTelaFilha{
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JLogin.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    private void jListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListMouseClicked
+        int i = jList.getSelectedIndex();
+        
+        if(i >= 0) {
+            tarefas.get(i).setFeito();
+            tarefaDAO.update(tarefas.get(i));
+            atualizarLista();
+            jList.setSelectedIndex(i);
         }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> {
-            new JTarefas(null, null).setVisible(true);
-        });
-    }
+    }//GEN-LAST:event_jListMouseClicked
    
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonAdd;

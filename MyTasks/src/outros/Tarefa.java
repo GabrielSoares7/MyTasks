@@ -58,5 +58,7 @@ public class Tarefa {
         this.feito = feito;
     }
     
-    
+    public void setFeito() {
+        this.feito = !feito;
+    }
 }
