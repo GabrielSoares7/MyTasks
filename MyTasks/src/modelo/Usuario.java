@@ -1,4 +1,4 @@
-package outros;
+package modelo;
 
 public class Usuario {
     private int id;
@@ -28,6 +28,7 @@ public class Usuario {
     }
     
     public void setLogin(String login) {
+        login = login.trim();
         if(!login.isEmpty() && login.length() >= 2)
             this.login = login;
         else

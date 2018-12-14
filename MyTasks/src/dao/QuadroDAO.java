@@ -1,14 +1,14 @@
 
-package database.dao;
+package dao;
 
-import database.Conexao;
+import servicos.Conexao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import outros.Quadro;
-import outros.Usuario;
+import modelo.Quadro;
+import modelo.Usuario;
 
 public class QuadroDAO {
     
@@ -29,9 +29,9 @@ public class QuadroDAO {
             stmt.close();
         } 
         catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null,
-                "Ocorreu um erro durante a inserção na base de dados: " + ex);
-            ex.printStackTrace();
+            throw new RuntimeException("Ocorreu um erro durante a"
+                    + " execução do 'insert'!\n"
+                    + ex.getMessage());
         }
     }
     
@@ -51,9 +51,8 @@ public class QuadroDAO {
             }
         }
         catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Ocorreu um erro na sua conexão com a base de dados!");
-            ex.printStackTrace();
-            System.exit(0);
+            throw new RuntimeException("Ocorreu um erro durante a busca!\n"
+                    + ex.getMessage());
         }
         return quadros;
     }
@@ -68,9 +67,8 @@ public class QuadroDAO {
             stmt.close();
         } 
         catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null,
-                "Ocorreu um erro durante a exclusão da base de dados: " + ex);
-            ex.printStackTrace();
+            throw new RuntimeException("Ocorreu um erro durante a exclusão!\n"
+                    + ex.getMessage());
         }
     }
     
@@ -85,9 +83,9 @@ public class QuadroDAO {
             stmt.close();
         } 
         catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null,
-                "Ocorreu um erro durante a atualização na base de dados: " + ex);
-            ex.printStackTrace();
+            throw new RuntimeException("Ocorreu um erro durante a"
+                    + " execução do 'update'!\n"
+                    + ex.getMessage());
         }
     }
 }

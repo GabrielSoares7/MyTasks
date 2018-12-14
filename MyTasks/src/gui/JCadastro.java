@@ -1,8 +1,7 @@
-package frames;
+package gui;
 
-import database.dao.UsuarioDAO;
-import outros.IAcoesTelaFilha;
-import outros.Usuario;
+import javax.swing.JOptionPane;
+import servicos.UsuarioServico;
 
 public class JCadastro extends javax.swing.JFrame {
 
@@ -123,10 +122,21 @@ public class JCadastro extends javax.swing.JFrame {
 
     private void jButtonCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCadastrarActionPerformed
         try {
-            Usuario user = new Usuario(jNomeTextField.getText(),
-                jLoginTextField.getText(), jPasswordField.getText());
-            new UsuarioDAO().insert(user);
-            this.dispose();
+            if(UsuarioServico.isLoginDisponivel(jLoginTextField)) {
+                try {
+                    UsuarioServico.salvar(jNomeTextField.getText(),
+                        jLoginTextField.getText(), jPasswordField.getText());
+                }
+                catch (RuntimeException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                }
+                this.dispose();
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "O login digitado é inválido "
+                        + "ou já está sendo usado!\n"
+                        + "Não use um login com espaços e observe se o campo está vazio");
+            }
         }
         catch (RuntimeException ex) {
             javax.swing.JOptionPane.showMessageDialog(null, ex.getMessage());
@@ -148,4 +158,8 @@ public class JCadastro extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPasswordField jPasswordField;
     // End of variables declaration//GEN-END:variables
+
+    private void UsuarioServico(String text, String text0, String text1) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

@@ -1,4 +1,4 @@
-package outros;
+package modelo;
 
 public class Tarefa {
     private int id;

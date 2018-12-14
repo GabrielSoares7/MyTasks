@@ -1,4 +1,4 @@
-package outros;
+package gui;
 
 public interface IAcoesTelaFilha {
     void fechar();

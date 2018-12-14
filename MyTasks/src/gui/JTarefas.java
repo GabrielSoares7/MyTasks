@@ -1,18 +1,15 @@
-package frames;
+package gui;
 
-import database.dao.QuadroDAO;
-import database.dao.TarefaDAO;
 import java.util.ArrayList;
-import outros.IAcoesTelaFilha;
-import outros.Quadro;
-import outros.Tarefa;
+import modelo.Quadro;
+import modelo.Tarefa;
+import servicos.TarefaServico;
 
 public class JTarefas extends javax.swing.JFrame implements IAcoesTelaFilha{
 
-    private Quadro quadro;
-    private IAcoesTelaFilha iAcoesTelaFilha;
+    private final Quadro quadro;
+    private final IAcoesTelaFilha iAcoesTelaFilha;
     private ArrayList<Tarefa> tarefas;
-    private TarefaDAO tarefaDAO;
     
     public JTarefas(IAcoesTelaFilha iAcoesTelaFilha, Quadro quadro) {
         initComponents();
@@ -20,7 +17,6 @@ public class JTarefas extends javax.swing.JFrame implements IAcoesTelaFilha{
         this.iAcoesTelaFilha = iAcoesTelaFilha;
         this.quadro = quadro;
         jTextFieldQuadro.setText(quadro.getNome());
-        tarefaDAO = new TarefaDAO();
         atualizarLista();
     }
     
@@ -35,7 +31,7 @@ public class JTarefas extends javax.swing.JFrame implements IAcoesTelaFilha{
     }
 
     private void atualizarLista() {
-        tarefas = tarefaDAO.findTarefasByQuadroId(quadro.getId());
+        tarefas = TarefaServico.carregarTarefas(quadro.getId());
         jList.setModel(new javax.swing.AbstractListModel<String>() {
             @Override
             public int getSize() {
@@ -163,7 +159,7 @@ public class JTarefas extends javax.swing.JFrame implements IAcoesTelaFilha{
         try {
             iAcoesTelaFilha.fechar();
             quadro.setNome(jTextFieldQuadro.getText());
-            new QuadroDAO().update(quadro);
+            servicos.QuadroServico.salvar(quadro);
         }
         catch (RuntimeException ex) {}
     }//GEN-LAST:event_onDispose
@@ -186,7 +182,7 @@ public class JTarefas extends javax.swing.JFrame implements IAcoesTelaFilha{
         int i = jList.getSelectedIndex();
         
         if(i >= 0) {
-            tarefaDAO.delete(tarefas.get(i));
+            TarefaServico.delete(tarefas.get(i));
             atualizarLista();
         }
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -196,7 +192,7 @@ public class JTarefas extends javax.swing.JFrame implements IAcoesTelaFilha{
         
         if(i >= 0) {
             tarefas.get(i).setFeito();
-            tarefaDAO.update(tarefas.get(i));
+            TarefaServico.salvar(tarefas.get(i));
             atualizarLista();
             jList.setSelectedIndex(i);
         }

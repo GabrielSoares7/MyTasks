@@ -1,23 +1,20 @@
-package frames;
+package gui;
 
-import database.dao.QuadroDAO;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import outros.IAcoesTelaFilha;
-import outros.Quadro;
-import outros.Usuario;
+import modelo.Quadro;
+import modelo.Usuario;
+import servicos.QuadroServico;
 
 public class JQuadros extends javax.swing.JFrame implements IAcoesTelaFilha {
     
     private final Usuario usuario;
     private ArrayList <Quadro> quadros;
     private final IAcoesTelaFilha iAcoesTelaFilha;
-    private final QuadroDAO quadroDAO;
     
     public JQuadros(IAcoesTelaFilha iAcoesTelaFilha, Usuario usuario) {
         initComponents();
         setLocationRelativeTo(null);
-        quadroDAO = new QuadroDAO();
         this.usuario = usuario;
         atualizarLista();
         jLabelBoasVindas.setText("Bem-vindx " + usuario.getNome());
@@ -31,7 +28,7 @@ public class JQuadros extends javax.swing.JFrame implements IAcoesTelaFilha {
     }
     
     public void atualizarLista() {
-        quadros = quadroDAO.findQuadrosByUserId(usuario.getId());
+        quadros = QuadroServico.retornarQuadros(usuario.getId());
         
         jListQuadros.setModel(new javax.swing.AbstractListModel<String>() {
             @Override
@@ -164,8 +161,7 @@ public class JQuadros extends javax.swing.JFrame implements IAcoesTelaFilha {
     private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
         String nome = JOptionPane.showInputDialog("Digite o nome do seu quadro:");
         try {
-            Quadro quadro = new Quadro(nome, usuario.getId());
-            quadroDAO.insert(quadro);
+            QuadroServico.salvar(new Quadro(nome, usuario.getId()));
             atualizarLista();
         }
         catch (RuntimeException ex) {
@@ -182,7 +178,7 @@ public class JQuadros extends javax.swing.JFrame implements IAcoesTelaFilha {
         int i = jListQuadros.getSelectedIndex();
         
         if(i >= 0) {
-            quadroDAO.deleteQuadroById(quadros.get(i).getId());
+            QuadroServico.deletarQuadro(quadros.get(i));
             atualizarLista();
         }
     }//GEN-LAST:event_jButtonDeletarActionPerformed

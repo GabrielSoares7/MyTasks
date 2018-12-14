@@ -1,12 +1,12 @@
-package database.dao;
+package dao;
 
-import database.Conexao;
+import servicos.Conexao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import outros.Tarefa;
+import modelo.Tarefa;
 
 public class TarefaDAO {
     private Conexao conexao;
@@ -15,7 +15,7 @@ public class TarefaDAO {
         conexao = new Conexao();
     }
     
-    public void insert(Tarefa tarefa, String nomeDoMetodo) {
+    public void insert(Tarefa tarefa) {
         String insert = "INSERT INTO tarefas (titulo, descricao,"
                 + " feito, quadro_id) VALUES (?, ?, ?, ?)";
         
@@ -30,9 +30,9 @@ public class TarefaDAO {
             
         } 
         catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null,
-                "Ocorreu um erro durante a inserção na base de dados: " + ex);
-            ex.printStackTrace();
+            throw new RuntimeException("Ocorreu um erro durante a"
+                    + " execução do 'insert'!\n"
+                    + ex.getMessage());
         }
     }
     
@@ -46,9 +46,8 @@ public class TarefaDAO {
             stmt.close();
         } 
         catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null,
-                "Ocorreu um erro durante a exclusão na base de dados: " + ex);
-            ex.printStackTrace();
+            throw new RuntimeException("Ocorreu um erro durante a exclusão!\n"
+                    + ex.getMessage());
         }
     }
     
@@ -71,8 +70,8 @@ public class TarefaDAO {
             }
         }
         catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Ocorreu um erro na sua conexão com a base de dados!");
-            ex.printStackTrace();
+            throw new RuntimeException("Ocorreu um erro durante a busca!\n"
+                    + ex.getMessage());
         }
         return tarefas;
     }
@@ -90,9 +89,8 @@ public class TarefaDAO {
             stmt.close();
         } 
         catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null,
-                "Ocorreu um erro durante a atualização na base de dados: " + ex);
-            ex.printStackTrace();
+            throw new RuntimeException("Ocorreu um erro durante a atualização!\n"
+                    + ex.getMessage());
         }
     }
 }

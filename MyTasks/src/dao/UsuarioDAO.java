@@ -1,14 +1,13 @@
-package database.dao;
+package dao;
 
-import database.Conexao;
+import servicos.Conexao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.JOptionPane;
-import outros.Usuario;
+import modelo.Usuario;
 
 public class UsuarioDAO {
-    private Conexao conexao;
+    private final Conexao conexao;
     
     public UsuarioDAO () {
         conexao = new Conexao();
@@ -19,7 +18,6 @@ public class UsuarioDAO {
         
         try {
             PreparedStatement stmt = conexao.getConexao().prepareStatement(insert);
-            /*Para inserir de forma mais segura no banco de dados*/
             stmt.setString(1, usuario.getNome());
             stmt.setString(2, usuario.getLogin());
             stmt.setString(3, usuario.getSenha());
@@ -27,13 +25,13 @@ public class UsuarioDAO {
             stmt.close();
         } 
         catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null,
-                "Ocorreu um erro durante o cadastro do usuário: " + ex);
-            ex.printStackTrace();
+            throw new RuntimeException("Ocorreu um erro na sua conexão "
+                    + "com a base de dados durante o insert!\n"
+                    + ex.getMessage());
         }
     }
     
-    public Usuario validarUsuario(String login, String senha) {
+    public Usuario findUsuarioByLoginAndPassword(String login, String senha) {
         String select = "SELECT * FROM usuarios WHERE login = ? AND senha = ?";
         
         try {
@@ -48,9 +46,30 @@ public class UsuarioDAO {
             }
         }
         catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Ocorreu um erro na sua conexão com a base de dados!");
-            ex.printStackTrace();
-            System.exit(0);
+            throw new RuntimeException("Ocorreu um erro na sua conexão "
+                    + "com a base de dados!\n"
+                    + ex.getMessage());
+        }
+        return null;
+    }
+    
+    public Usuario findUsuarioByLogin(String login) {
+        String select = "SELECT * FROM usuarios WHERE login = ?";
+        
+        try {
+            PreparedStatement stmt = conexao.getConexao().prepareStatement(select);
+            stmt.setString(1, login);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.first()) {
+                return new Usuario(rs.getInt("id"), 
+                        rs.getString("nome"), rs.getString("login"),
+                        rs.getString("senha"));
+            }
+        }
+        catch (SQLException ex) {
+            throw new RuntimeException("Ocorreu um erro na sua conexão "
+                    + "com a base de dados!\n"
+                    + ex.getMessage());
         }
         return null;
     }

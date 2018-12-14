@@ -1,20 +1,17 @@
-package frames;
+package gui;
 
-import database.dao.TarefaDAO;
-import outros.IAcoesTelaFilha;
-import outros.Tarefa;
+import modelo.Tarefa;
+import servicos.TarefaServico;
 
 public class JTarefa extends javax.swing.JFrame {
 
-    private Tarefa tarefa;
-    private boolean novaTarefa;
-    private IAcoesTelaFilha iAcoesTelaFilha;
+    private final Tarefa tarefa;
+    private final IAcoesTelaFilha iAcoesTelaFilha;
     
     public JTarefa(IAcoesTelaFilha iAcoesTelaFilha, Tarefa tarefa, boolean novaTarefa) {
         initComponents();
         setLocationRelativeTo(null);
         this.tarefa = tarefa;
-        this.novaTarefa = novaTarefa;
         this.iAcoesTelaFilha = iAcoesTelaFilha;
         
         if(!novaTarefa) {
@@ -114,13 +111,7 @@ public class JTarefa extends javax.swing.JFrame {
         tarefa.setDescricao(jTextArea.getText());
         tarefa.setFeito(jCheckBox.isSelected());
         
-        if(novaTarefa) {
-            new TarefaDAO().insert(tarefa, "JTarefa.onDispose()");
-        }
-        else {
-            new TarefaDAO().update(tarefa);
-        }
-        
+        TarefaServico.salvar(tarefa);
         iAcoesTelaFilha.fechar();
     }//GEN-LAST:event_onDispose
 

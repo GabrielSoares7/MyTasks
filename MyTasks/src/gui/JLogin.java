@@ -1,9 +1,8 @@
-package frames;
+package gui;
 
-import database.dao.UsuarioDAO;
 import javax.swing.JOptionPane;
-import outros.IAcoesTelaFilha;
-import outros.Usuario;
+import modelo.Usuario;
+import servicos.UsuarioServico;
 
 public class JLogin extends javax.swing.JFrame implements IAcoesTelaFilha {
 
@@ -125,14 +124,13 @@ public class JLogin extends javax.swing.JFrame implements IAcoesTelaFilha {
     }//GEN-LAST:event_jButtonCadastrarActionPerformed
 
     private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLoginActionPerformed
-        Usuario user = new UsuarioDAO().validarUsuario(jTextFieldLogin.getText(),
-                jPasswordField.getText());
-        if(user == null) {
+        if(!UsuarioServico.isLoginValido(jTextFieldLogin.getText(), 
+                jPasswordField.getText())) {
             JOptionPane.showMessageDialog(null, "O usuário digitado não existe"
                     + " ou a senha está incorreta!");
         }
         else {
-            logar(user);
+            logar(UsuarioServico.buscarUsuarioPorLogin(jTextFieldLogin.getText()));
         }
     }//GEN-LAST:event_jButtonLoginActionPerformed
 

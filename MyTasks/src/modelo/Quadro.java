@@ -1,4 +1,4 @@
-package outros;
+package modelo;
 
 public class Quadro {
     private int id;
@@ -12,6 +12,7 @@ public class Quadro {
     }
 
     public Quadro(String nome, int userId) {
+        id = 0;
         setNome(nome);
         this.userId = userId;
     }
