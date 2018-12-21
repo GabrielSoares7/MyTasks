@@ -1,15 +1,19 @@
 package modelo;
 
+import java.util.ArrayList;
+
 public class Usuario {
     private int id;
     private String nome;
     private String login;
     private String senha;
+    private ArrayList<Quadro> quadros;
 
     public Usuario(String nome, String login, String senha) {
         setNome(nome);
         setLogin(login);
         setSenha(senha);
+        quadros = new ArrayList<>();
     }
 
     public Usuario(int id, String nome, String login, String senha) {
@@ -17,6 +21,15 @@ public class Usuario {
         setNome(nome);
         setLogin(login);
         setSenha(senha);
+        this.quadros = new ArrayList<>();
+    }
+    
+    public Usuario(int id, String nome, String login, String senha, ArrayList<Quadro> quadros) {
+        this.id = id;
+        setNome(nome);
+        setLogin(login);
+        setSenha(senha);
+        this.quadros = quadros;
     }
 
     public int getId() {
@@ -57,5 +70,13 @@ public class Usuario {
             throw new RuntimeException("Um nome precisa ser informado!");
         else
             this.nome = nome;
+    }
+
+    public ArrayList<Quadro> getQuadros() {
+        return quadros;
+    }
+
+    public void setQuadros(ArrayList<Quadro> quadros) {
+        this.quadros = quadros;
     }
 }

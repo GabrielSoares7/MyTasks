@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import modelo.Usuario;
+import servicos.QuadroServico;
 
 public class UsuarioDAO {
     private final Conexao conexao;
@@ -40,9 +41,11 @@ public class UsuarioDAO {
             stmt.setString(2, senha);
             ResultSet rs = stmt.executeQuery();
             if(rs.first()) {
-                return new Usuario(rs.getInt("id"), 
+                Usuario usuario = new Usuario(rs.getInt("id"), 
                         rs.getString("nome"), rs.getString("login"),
                         rs.getString("senha"));
+                usuario.setQuadros(QuadroServico.retornarQuadros(usuario));
+                return usuario;
             }
         }
         catch (SQLException ex) {
@@ -61,9 +64,11 @@ public class UsuarioDAO {
             stmt.setString(1, login);
             ResultSet rs = stmt.executeQuery();
             if(rs.first()) {
-                return new Usuario(rs.getInt("id"), 
+                Usuario usuario = new Usuario(rs.getInt("id"), 
                         rs.getString("nome"), rs.getString("login"),
                         rs.getString("senha"));
+                usuario.setQuadros(QuadroServico.retornarQuadros(usuario));
+                return usuario;
             }
         }
         catch (SQLException ex) {

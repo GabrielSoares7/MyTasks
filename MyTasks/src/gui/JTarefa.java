@@ -1,24 +1,33 @@
 package gui;
 
+import modelo.Quadro;
 import modelo.Tarefa;
 import servicos.TarefaServico;
 
 public class JTarefa extends javax.swing.JFrame {
 
     private final Tarefa tarefa;
+    private final Quadro quadroDaTarefa;
     private final IAcoesTelaFilha iAcoesTelaFilha;
     
-    public JTarefa(IAcoesTelaFilha iAcoesTelaFilha, Tarefa tarefa, boolean novaTarefa) {
+    public JTarefa(IAcoesTelaFilha iAcoesTelaFilha, Tarefa tarefa, Quadro quadroDaTarefa) {
+        this.tarefa = tarefa;
         initComponents();
         setLocationRelativeTo(null);
-        this.tarefa = tarefa;
+        this.quadroDaTarefa = quadroDaTarefa;
         this.iAcoesTelaFilha = iAcoesTelaFilha;
         
-        if(!novaTarefa) {
-            jCheckBox.setSelected(tarefa.isFeito());
-            jTextArea.setText(tarefa.getDescricao());
-            jTextFieldTitle.setText(tarefa.getTitulo());
-        }
+        jCheckBox.setSelected(tarefa.isFeito());
+        jTextArea.setText(tarefa.getDescricao());
+        jTextFieldTitle.setText(tarefa.getTitulo());
+    }
+    
+    public JTarefa (IAcoesTelaFilha iAcoesTelaFilha, Quadro quadroDaTarefa) {
+        initComponents();
+        setLocationRelativeTo(null);
+        this.quadroDaTarefa = quadroDaTarefa;
+        this.iAcoesTelaFilha = iAcoesTelaFilha;
+        tarefa = new Tarefa();
     }
 
     /**
@@ -111,7 +120,7 @@ public class JTarefa extends javax.swing.JFrame {
         tarefa.setDescricao(jTextArea.getText());
         tarefa.setFeito(jCheckBox.isSelected());
         
-        TarefaServico.salvar(tarefa);
+        TarefaServico.salvar(tarefa, quadroDaTarefa);
         iAcoesTelaFilha.fechar();
     }//GEN-LAST:event_onDispose
 

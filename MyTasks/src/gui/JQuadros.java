@@ -1,6 +1,5 @@
 package gui;
 
-import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import modelo.Quadro;
 import modelo.Usuario;
@@ -9,7 +8,6 @@ import servicos.QuadroServico;
 public class JQuadros extends javax.swing.JFrame implements IAcoesTelaFilha {
     
     private final Usuario usuario;
-    private ArrayList <Quadro> quadros;
     private final IAcoesTelaFilha iAcoesTelaFilha;
     
     public JQuadros(IAcoesTelaFilha iAcoesTelaFilha, Usuario usuario) {
@@ -28,17 +26,17 @@ public class JQuadros extends javax.swing.JFrame implements IAcoesTelaFilha {
     }
     
     public void atualizarLista() {
-        quadros = QuadroServico.retornarQuadros(usuario.getId());
+        usuario.setQuadros(QuadroServico.retornarQuadros(usuario));
         
         jListQuadros.setModel(new javax.swing.AbstractListModel<String>() {
             @Override
             public int getSize() {
-                return quadros.size(); 
+                return usuario.getQuadros().size(); 
             }
             
             @Override
             public String getElementAt(int i) {
-                return quadros.get(i).getNome(); 
+                return usuario.getQuadros().get(i).getNome(); 
             }
         });
     }
@@ -161,7 +159,7 @@ public class JQuadros extends javax.swing.JFrame implements IAcoesTelaFilha {
     private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
         String nome = JOptionPane.showInputDialog("Digite o nome do seu quadro:");
         try {
-            QuadroServico.salvar(new Quadro(nome, usuario.getId()));
+            QuadroServico.salvar(new Quadro(nome), usuario);
             atualizarLista();
         }
         catch (RuntimeException ex) {
@@ -178,7 +176,7 @@ public class JQuadros extends javax.swing.JFrame implements IAcoesTelaFilha {
         int i = jListQuadros.getSelectedIndex();
         
         if(i >= 0) {
-            QuadroServico.deletarQuadro(quadros.get(i));
+            QuadroServico.deletarQuadro(usuario.getQuadros().get(i));
             atualizarLista();
         }
     }//GEN-LAST:event_jButtonDeletarActionPerformed
@@ -187,8 +185,8 @@ public class JQuadros extends javax.swing.JFrame implements IAcoesTelaFilha {
         int i = jListQuadros.getSelectedIndex();
         
         if(i >= 0) {
-            JTarefas jTarefas = new JTarefas(this, quadros.get(i));
-            jTarefas.abrir();
+            JQuadro jQuadro = new JQuadro(this, usuario.getQuadros().get(i), usuario);
+            jQuadro.abrir();
         }
     }//GEN-LAST:event_jButtonAbrirActionPerformed
 

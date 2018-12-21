@@ -6,9 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 import modelo.Quadro;
 import modelo.Usuario;
+import servicos.TarefaServico;
 
 public class QuadroDAO {
     
@@ -18,13 +18,13 @@ public class QuadroDAO {
         conexao = new Conexao();
     }
     
-    public void insert(Quadro quadro) {
+    public void insert(Quadro quadro, int usuarioId) {
         String insert = "INSERT INTO quadros (nome, user_id) VALUES (?, ?)";
         
         try {
             PreparedStatement stmt = conexao.getConexao().prepareStatement(insert);
             stmt.setString(1, quadro.getNome());
-            stmt.setInt(2, quadro.getUserId());
+            stmt.setInt(2, usuarioId);
             stmt.execute();
             stmt.close();
         } 
@@ -35,18 +35,21 @@ public class QuadroDAO {
         }
     }
     
-    public ArrayList<Quadro> findQuadrosByUserId(int userId) {
+    public ArrayList<Quadro> findQuadrosByUserId(Usuario usuario) {
         String select = "SELECT id, nome, user_id FROM quadros WHERE user_id = ?";
         ArrayList<Quadro> quadros = new ArrayList<> ();
         try {
             PreparedStatement stmt = conexao.getConexao().prepareStatement(select);
-            stmt.setInt(1, userId);
+            stmt.setInt(1, usuario.getId());
             ResultSet rs = stmt.executeQuery();
             if(rs.first()) {
                 do {
                     quadros.add(new Quadro(rs.getInt("id"),
-                            rs.getString("nome"),
-                            rs.getInt("user_id")));
+                            rs.getString("nome")));
+                    
+                    int i = quadros.size() - 1;
+                    quadros.get(i).setTarefas(TarefaServico
+                            .carregarTarefasPorQuadro(quadros.get(i)));
                 }while(rs.next());
             }
         }

@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import modelo.Quadro;
 import modelo.Tarefa;
 
 public class TarefaDAO {
@@ -15,7 +16,7 @@ public class TarefaDAO {
         conexao = new Conexao();
     }
     
-    public void insert(Tarefa tarefa) {
+    public void insert(Tarefa tarefa, int quadroId) {
         String insert = "INSERT INTO tarefas (titulo, descricao,"
                 + " feito, quadro_id) VALUES (?, ?, ?, ?)";
         
@@ -24,7 +25,7 @@ public class TarefaDAO {
             stmt.setString(1, tarefa.getTitulo());
             stmt.setString(2, tarefa.getDescricao());
             stmt.setBoolean(3, tarefa.isFeito());
-            stmt.setInt(4, tarefa.getQuadroId());
+            stmt.setInt(4, quadroId);
             stmt.execute();
             stmt.close();
             
@@ -51,21 +52,20 @@ public class TarefaDAO {
         }
     }
     
-    public ArrayList<Tarefa> findTarefasByQuadroId(int quadroId) {
+    public ArrayList<Tarefa> findTarefasByQuadroId(Quadro quadro) {
         String select = "SELECT id, titulo, descricao, feito, quadro_id "
                 + "FROM tarefas WHERE quadro_id = ?";
         ArrayList<Tarefa> tarefas = new ArrayList<> ();
         try {
             PreparedStatement stmt = conexao.getConexao().prepareStatement(select);
-            stmt.setInt(1, quadroId);
+            stmt.setInt(1, quadro.getId());
             ResultSet rs = stmt.executeQuery();
             if(rs.first()) {
                 do {
                     tarefas.add(new Tarefa(rs.getInt("id"),
                             rs.getString("titulo"),
                             rs.getString("descricao"),
-                            rs.getBoolean("feito"),
-                            rs.getInt("quadro_id")));
+                            rs.getBoolean("feito")));
                 }while(rs.next());
             }
         }

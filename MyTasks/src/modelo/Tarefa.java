@@ -5,29 +5,23 @@ public class Tarefa {
     private String titulo;
     private String descricao;
     private boolean feito;
-    private int quadroId;
 
-    public Tarefa(int id, String titulo, String descricao, boolean feito, int quadroId) {
+    public Tarefa(int id, String titulo, String descricao, boolean feito) {
         this.id = id;
         this.titulo = titulo;
         this.descricao = descricao;
         this.feito = feito;
-        this.quadroId = quadroId;
     }
 
-    public Tarefa(String titulo, String descricao, boolean feito, int quadroId) {
+    public Tarefa(String titulo, String descricao, boolean feito) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.feito = feito;
-        this.quadroId = quadroId;
     }
 
-    public Tarefa(int quadroId) {
-        this.quadroId = quadroId;
-    }
-    
-    public int getQuadroId() {
-        return quadroId;
+    public Tarefa() {
+        id = 0;
+        feito = false;
     }
 
     public int getId() {

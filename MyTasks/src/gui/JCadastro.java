@@ -122,7 +122,7 @@ public class JCadastro extends javax.swing.JFrame {
 
     private void jButtonCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCadastrarActionPerformed
         try {
-            if(UsuarioServico.isLoginDisponivel(jLoginTextField)) {
+            if(UsuarioServico.isLoginDisponivel(jLoginTextField.getText())) {
                 try {
                     UsuarioServico.salvar(jNomeTextField.getText(),
                         jLoginTextField.getText(), jPasswordField.getText());

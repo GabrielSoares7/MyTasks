@@ -1,20 +1,28 @@
 package modelo;
 
+import java.util.ArrayList;
+
 public class Quadro {
     private int id;
     private String nome;
-    private int userId;
+    private ArrayList<Tarefa> tarefas;
 
-    public Quadro(int id, String nome, int userId) {
+    public Quadro(int id, String nome, ArrayList <Tarefa> tarefas) {
         this.id = id;
         setNome(nome);
-        this.userId = userId;
+        this.tarefas = tarefas;
     }
 
-    public Quadro(String nome, int userId) {
+    public Quadro(int id, String nome) {
+        this.id = id;
+        setNome(nome);
+        this.tarefas = new ArrayList<>();
+    }
+    
+    public Quadro(String nome) {
         id = 0;
         setNome(nome);
-        this.userId = userId;
+        this.tarefas = new ArrayList<>();
     }
     
     public String getNome() {
@@ -36,7 +44,11 @@ public class Quadro {
         this.id = id;
     }
 
-    public int getUserId() {
-        return userId;
+    public ArrayList<Tarefa> getTarefas() {
+        return tarefas;
+    } 
+
+    public void setTarefas(ArrayList<Tarefa> tarefas) {
+        this.tarefas = tarefas;
     }
 }

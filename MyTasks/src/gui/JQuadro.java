@@ -1,23 +1,23 @@
 package gui;
 
-import java.util.ArrayList;
 import modelo.Quadro;
-import modelo.Tarefa;
+import modelo.Usuario;
 import servicos.TarefaServico;
 
-public class JTarefas extends javax.swing.JFrame implements IAcoesTelaFilha{
+public class JQuadro extends javax.swing.JFrame implements IAcoesTelaFilha{
 
     private final Quadro quadro;
     private final IAcoesTelaFilha iAcoesTelaFilha;
-    private ArrayList<Tarefa> tarefas;
+    private final Usuario usuario;
     
-    public JTarefas(IAcoesTelaFilha iAcoesTelaFilha, Quadro quadro) {
+    public JQuadro(IAcoesTelaFilha iAcoesTelaFilha, Quadro quadro, Usuario usuario) {
         initComponents();
         setLocationRelativeTo(null);
         this.iAcoesTelaFilha = iAcoesTelaFilha;
         this.quadro = quadro;
         jTextFieldQuadro.setText(quadro.getNome());
         atualizarLista();
+        this.usuario = usuario;
     }
     
     @Override
@@ -31,17 +31,17 @@ public class JTarefas extends javax.swing.JFrame implements IAcoesTelaFilha{
     }
 
     private void atualizarLista() {
-        tarefas = TarefaServico.carregarTarefas(quadro.getId());
+        quadro.setTarefas(TarefaServico.carregarTarefasPorQuadro(quadro));
         jList.setModel(new javax.swing.AbstractListModel<String>() {
             @Override
             public int getSize() {
-                return tarefas.size();
+                return quadro.getTarefas().size();
             }
             
             @Override
             public String getElementAt(int i) {
-                return (tarefas.get(i).isFeito() ? "☑ " : "☐ ") 
-                        + tarefas.get(i).getTitulo(); 
+                return (quadro.getTarefas().get(i).isFeito() ? "☑ " : "☐ ") 
+                        + quadro.getTarefas().get(i).getTitulo(); 
             }
         });
     }
@@ -159,13 +159,13 @@ public class JTarefas extends javax.swing.JFrame implements IAcoesTelaFilha{
         try {
             iAcoesTelaFilha.fechar();
             quadro.setNome(jTextFieldQuadro.getText());
-            servicos.QuadroServico.salvar(quadro);
+            servicos.QuadroServico.salvar(quadro, usuario);
         }
         catch (RuntimeException ex) {}
     }//GEN-LAST:event_onDispose
 
     private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
-        JTarefa jTarefa = new JTarefa(this, new Tarefa(quadro.getId()), true);
+        JTarefa jTarefa = new JTarefa(this, quadro);
         jTarefa.setVisible(true);
     }//GEN-LAST:event_jButtonAddActionPerformed
 
@@ -173,7 +173,7 @@ public class JTarefas extends javax.swing.JFrame implements IAcoesTelaFilha{
         int i = jList.getSelectedIndex();
         
         if(i >= 0) {
-            JTarefa jTarefa = new JTarefa (this, tarefas.get(i), false);
+            JTarefa jTarefa = new JTarefa (this, quadro.getTarefas().get(i), quadro);
             jTarefa.setVisible(true);
         }
     }//GEN-LAST:event_jButtonDetalhesActionPerformed
@@ -182,7 +182,7 @@ public class JTarefas extends javax.swing.JFrame implements IAcoesTelaFilha{
         int i = jList.getSelectedIndex();
         
         if(i >= 0) {
-            TarefaServico.delete(tarefas.get(i));
+            TarefaServico.delete(quadro.getTarefas().get(i));
             atualizarLista();
         }
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -191,8 +191,8 @@ public class JTarefas extends javax.swing.JFrame implements IAcoesTelaFilha{
         int i = jList.getSelectedIndex();
         
         if(i >= 0) {
-            tarefas.get(i).setFeito();
-            TarefaServico.salvar(tarefas.get(i));
+            quadro.getTarefas().get(i).setFeito();
+            TarefaServico.salvar(quadro.getTarefas().get(i), quadro);
             atualizarLista();
             jList.setSelectedIndex(i);
         }

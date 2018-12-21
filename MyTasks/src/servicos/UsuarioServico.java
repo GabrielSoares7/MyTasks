@@ -23,15 +23,13 @@ public class UsuarioServico {
     
     public static boolean isLoginDisponivel(String login) {
         login = login.trim();
-        if(!login.isEmpty() && login.length() >= 3 &&
-                login.split(" ").length <= 1)
+        if(!(!login.isEmpty() && login.length() > 3 &&
+                login.split(" ").length <= 1)) {
+            System.out.println("AKOIU");
             return false;
-        else {
-            return buscarUsuarioPorLogin(login) != null;
         }
-    }
-
-    public static boolean isLoginDisponivel(JTextField jLoginTextField) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        else {
+            return buscarUsuarioPorLogin(login) == null;
+        }
     }
 }
